@@ -5,6 +5,8 @@
 //  Created by abradbury on 20/02/2013.
 //  Copyright 2013 abradbury. All rights reserved.
 //
+// TODO: Add a random menu item that randomly selects one of the other Bing desktop items if the user is not happy with the current one.
+//
 
 #import "AppDelegate.h"
 
@@ -17,7 +19,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	xmlLocation = @"http://www.bing.com/hpimagearchive.aspx?format=xml&idx=0&n=1&mbl=0&mkt=en-ww";
 	copyrightStr = [[NSMutableString alloc] init];
-	imgDownloadLoc = @"~/Downloads/";
+	imgDownloadLoc = @"~/Pictures/Bing Desktop/";
 	imgDownloadName = @"bingImage.jpg";
 	imgPath = [[imgDownloadLoc stringByExpandingTildeInPath] stringByAppendingPathComponent:imgDownloadName];
 	
@@ -163,7 +165,7 @@
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection*)connection {
-	NSLog(@"Successfully received %d bytes of data for XML file.",[responseData length]);
+	NSLog(@"Successfully received %lu bytes of data for XML file.", (unsigned long)[responseData length]);
 		
 	[self setData:responseData encoding:[urlResponse textEncodingName]];
 	if (!responseData) {
