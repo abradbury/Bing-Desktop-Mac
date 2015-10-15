@@ -3,10 +3,14 @@
 //  BingDesktop
 //
 //  Created by abradbury on 20/02/2013.
-//  Copyright 2013 abradbury. All rights reserved.
+//  Copyright 2015 abradbury. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
+
+// For internet connection checks
+#import "Reachability.h"
+#import <SystemConfiguration/SystemConfiguration.h>
 
 @interface AppDelegate : NSObject <NSXMLParserDelegate> {
 	
@@ -39,31 +43,28 @@
 	
 	NSScreen *curScreen;
 	
-	NSTimer *timer;						// The timer used to schedule checks
+	NSTimer *startProgramTimer;						// The timer used to schedule checks
+    BOOL wallpaperSuccessfullyDownloadedAndSet;
 }
 
--(void)saveAppState:(id)sender;
--(void)getAppState:(id)sender;
+-(void)saveAppState;
+-(void)getAppState;
 
 // --------------- The Menu --------------- //
 //@property (assign) IBOutlet NSWindow *window;
 
 // ------------- The Parsing -------------- //
-- (void)setData:(NSData *)theData encoding:(NSString *)encoding;
 - (void)setDocument:(NSXMLDocument *)doc;
-- (void)setURL:(NSURL *)theUrl;
 
-- (IBAction)getXML:(id)sender;
+- (void)getXML;
 
-- (BOOL)parseXmlFromURL:(NSURL *)url;
+- (void)parseXmlFromURL;
 
 // ------------- The Download ------------- //
-- (BOOL)imageExists:(id)sender;
-- (void)startDownloadingURL:(id)sender;
+- (BOOL)isImageDownloaded;
+- (void)startDownloadingURL;
 
 // ------------ The Background ------------ //
-- (void)setDesktopBackground:(id)sender;
-
-- (void)prepareTimer;
+- (void)setDesktopBackground;
 
 @end
