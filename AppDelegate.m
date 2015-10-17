@@ -49,19 +49,24 @@
  *  @param  forTomrrow  True if timer is for tomorrow, false for today
  */
 - (void)scheduleNextTimedAction:(BOOL)forTomorrow {
-    if(forTomorrow) NSLog(@"Setting timer for tomorrow");
-    else NSLog(@"Setting timer for today");
-    
     NSDate* now = [NSDate date] ;
     NSLog(@"Current time: %@", now);
     
     NSDateComponents* tomorrowComponents = [NSDateComponents new] ;
-    tomorrowComponents.day = 1 ;
+    
+    if(forTomorrow) {
+        NSLog(@"Setting timer for tomorrow");
+        tomorrowComponents.day = 1 ;
+    } else {
+        NSLog(@"Setting timer for today");
+        tomorrowComponents.day = 0 ;
+    }
+    
     NSCalendar* calendar = [NSCalendar currentCalendar] ;
     NSDate* tomorrow = [calendar dateByAddingComponents:tomorrowComponents toDate:now options:0] ;
     
     NSDateComponents* tomorrowAt8AMComponents = [calendar components:(NSEraCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:tomorrow] ;
-    tomorrowAt8AMComponents.hour = 8 ;
+    tomorrowAt8AMComponents.hour = 7 ;
     tomorrowAt8AMComponents.minute = 5 ;
     NSDate* tomorrowAt8AM = [calendar dateFromComponents:tomorrowAt8AMComponents] ;
     
