@@ -362,6 +362,7 @@
         [self startDownloadingURL];
     } else if (!([self isImageSetAsWallpaper])) {
         [self setDesktopBackground:nil];
+        [self showNotification:nil];
     }
 }
 
@@ -469,6 +470,15 @@
         wallpaperSuccessfullyDownloadedAndSet = TRUE;
         [self saveAppState];
     }
+}
+
+- (IBAction)showNotification:(id)sender{
+    NSUserNotification *notification = [[NSUserNotification alloc] init];
+    notification.title = @"New wallpaper downloaded";
+    notification.informativeText = copyrightStr;
+    notification.soundName = nil;
+    
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
 
 /************************************ Menu ************************************/

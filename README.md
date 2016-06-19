@@ -13,6 +13,7 @@ Features
 - Can check if wallpaper is already downloaded and/or set as background
 - Waits until internet connection is available
 - Can set background on multiple monitors (not workspaces)
+- Issues a notification to the Notification Center of the new image
 
 Further Work
 ------------
