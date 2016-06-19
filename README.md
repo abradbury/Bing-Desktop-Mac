@@ -20,6 +20,5 @@ Further Work
 - Remove duplication in scheduling functions
 - Tidy up, simplify and de-clutter code
 - Increase internet wait time after successive failures
-- Set wallpaper on other spaces when space becomes active
 - Close memory leaks and manage memory better
 - Update header file to match main file
