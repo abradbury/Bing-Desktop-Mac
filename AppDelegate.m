@@ -37,6 +37,12 @@
                                                               name:NSWorkspaceDidWakeNotification
                                                             object:nil];
     
+    // Catch when the user changes spaces/desktops to check the image
+    [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self
+           selector:@selector(setDesktopBackground:)
+               name:NSWorkspaceActiveSpaceDidChangeNotification
+             object:[NSWorkspace sharedWorkspace]];
+    
 	[self getAppState];         // Gets the previous application state
     [self waitForInternet:nil]; // Start once internet connection is available
 }
@@ -135,9 +141,7 @@
 -(BOOL)hasTodaysWallaperBeenDownloaded {
     NSCalendar* calendar = [NSCalendar currentCalendar];
     NSDate * now = [NSDate date];
-//    NSDate * storedDate = [self dateFromString: [self getTodaysDate] :@"MM/dd/yyyy hh:mm a"];
     NSDate * storedDate = [self dateFromString:[[NSUserDefaults standardUserDefaults] stringForKey:@"com.bingDesktop.wallpaperLastDownloaded"] :@"MM/dd/yyyy hh:mm a"];
-    
     
     NSLog(@"Current time: %@", now);
     NSLog(@"Stored date:  %@", storedDate);
@@ -357,7 +361,7 @@
     if (!([self isImageDownloaded])) {
         [self startDownloadingURL];
     } else if (!([self isImageSetAsWallpaper])) {
-        [self setDesktopBackground];
+        [self setDesktopBackground:nil];
     }
 }
 
@@ -418,7 +422,7 @@
                 NSData *imageData = [NSData dataWithContentsOfURL: location];
                 [imageData writeToFile:imgPath atomically:NO];
                 
-                [self setDesktopBackground];
+                [self setDesktopBackground:nil];
             }
         }];
     
@@ -427,13 +431,12 @@
 
 /**************************** Wallpaper Background ****************************/
 
-- (void)setDesktopBackground {
-	curScreen = [NSScreen mainScreen];
+- (void)setDesktopBackground:(NSNotification *)aNotification {
+    NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
+    NSScreen *screen = [NSScreen mainScreen];
 	NSError *error = nil;
     
-    NSLog(@"Setting desktop background...");
-    
-    NSDictionary *screenOptions = [[NSWorkspace sharedWorkspace] desktopImageOptionsForScreen:curScreen];
+    NSDictionary *screenOptions = [workspace desktopImageOptionsForScreen: screen];
     NSURL *pathToImg = [NSURL fileURLWithPath:imgPath];
     
     NSArray *screens = [NSScreen screens];
@@ -442,12 +445,24 @@
     // Apply wallpaper to every physical screen
     // Currently not possible to set all desktops
     for (iterScreen in screens) {
-        [[NSWorkspace sharedWorkspace] setDesktopImageURL:pathToImg
-                                                forScreen:iterScreen
-                                                  options:screenOptions
-                                                    error:&error];
+        NSURL *curr = [workspace desktopImageURLForScreen: iterScreen];
+        if (![curr isEqual:pathToImg]) {
+            NSLog(@"Setting desktop background...");
+            
+            [workspace setDesktopImageURL:pathToImg
+                                forScreen:iterScreen
+                                  options:screenOptions
+                                    error:&error];
+            
+            if (error) {
+                NSLog(@"Failed to set desktop background: %@", [error localizedDescription]);
+            }
+        } else {
+            NSLog(@"Not setting desktop background...");
+        }
     }
     
+    // TODO: Or errors?
 	if (error) {
 		NSLog(@"Failed to set desktop background: %@", [error localizedDescription]);
     } else {
@@ -509,6 +524,8 @@
     NSString *currentWallpaperString = [currentWallpaperUrl absoluteString];
     NSArray *currentWallpaperArray = [currentWallpaperString componentsSeparatedByString:@"/"];
     NSString *currentWallpaper = [[currentWallpaperArray objectAtIndex: [currentWallpaperArray count] -1] retain];
+    
+    NSLog(@"Current wallpaper: %@", currentWallpaper);
     
     if ([currentWallpaper isEqualToString:imgDownloadName]) {
         [currentWallpaper release];

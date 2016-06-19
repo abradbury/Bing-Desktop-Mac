@@ -40,9 +40,7 @@
 	
 	// ------------ The Background ------------ //
     unsigned int options;				// The set of options to use for input from the fidelityMatrix
-	
-	NSScreen *curScreen;
-	
+		
 	NSTimer *startProgramTimer;						// The timer used to schedule checks
     BOOL wallpaperSuccessfullyDownloadedAndSet;
 }
@@ -65,6 +63,6 @@
 - (void)startDownloadingURL;
 
 // ------------ The Background ------------ //
-- (void)setDesktopBackground;
+- (void)setDesktopBackground:(NSNotification *)aNotification;
 
 @end
