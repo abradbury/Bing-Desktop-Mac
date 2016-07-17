@@ -196,10 +196,8 @@
     // Store the copyright string
     [defaults setObject:copyrightStr forKey:@"com.bingDesktop.copyright"];
     
-    if ([copyrightStr isEqualToString:[defaults stringForKey:@"com.bingDesktop.copyright"]]) {
-        NSLog(@"Copyright string saved");
-    } else {
-        NSLog(@"Copyright string not saved.");
+    if (![copyrightStr isEqualToString:[defaults stringForKey:@"com.bingDesktop.copyright"]]) {
+        NSLog(@"Failed to save copyright string.");
     }
     
     // Store the date that the last wallpaper was downloaded
@@ -209,20 +207,16 @@
         [defaults setObject: wallpaperDownloadedDate forKey:@"com.bingDesktop.wallpaperLastDownloaded"];
         wallpaperSuccessfullyDownloadedAndSet = FALSE;
         
-        if ([wallpaperDownloadedDate isEqualToString:[defaults stringForKey:@"com.bingDesktop.wallpaperLastDownloaded"]]) {
-            NSLog(@"Wallpaper last downloaded date saved.");
-        } else {
-            NSLog(@"Wallpaper last downloaded date not saved.");
+        if (![wallpaperDownloadedDate isEqualToString:[defaults stringForKey:@"com.bingDesktop.wallpaperLastDownloaded"]]) {
+            NSLog(@"Failed to save qallpaper last downloaded date.");
         }
     }
     
     // Store the image path
     [defaults setObject:imgPath forKey:@"com.bingDesktop.imagePath"];
     
-    if ([imgPath isEqualToString:[defaults stringForKey:@"com.bingDesktop.imagePath"]]) {
-        NSLog(@"Image path saved");
-    } else {
-        NSLog(@"Image path not saved.");
+    if (![imgPath isEqualToString:[defaults stringForKey:@"com.bingDesktop.imagePath"]]) {
+        NSLog(@"Failed to save image path.");
     }
 }
 
@@ -363,6 +357,8 @@
     } else if (!([self isImageSetAsWallpaper])) {
         [self setDesktopBackground:nil];
     }
+    
+    [self showNotification:nil];
 }
 
 /**
@@ -457,8 +453,6 @@
             if (error) {
                 NSLog(@"Failed to set desktop background: %@", [error localizedDescription]);
             }
-        } else {
-            NSLog(@"Not setting desktop background...");
         }
     }
     
@@ -467,7 +461,6 @@
 		NSLog(@"Failed to set desktop background: %@", [error localizedDescription]);
     } else {
         wallpaperSuccessfullyDownloadedAndSet = TRUE;
-        [self showNotification:nil];
         [self saveAppState];
     }
 }
