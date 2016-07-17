@@ -362,7 +362,6 @@
         [self startDownloadingURL];
     } else if (!([self isImageSetAsWallpaper])) {
         [self setDesktopBackground:nil];
-        [self showNotification:nil];
     }
 }
 
@@ -468,6 +467,7 @@
 		NSLog(@"Failed to set desktop background: %@", [error localizedDescription]);
     } else {
         wallpaperSuccessfullyDownloadedAndSet = TRUE;
+        [self showNotification:nil];
         [self saveAppState];
     }
 }
