@@ -1,7 +1,7 @@
 Bing Desktop Mac
 ================
 
-A status bar application for Mac OS X which looks for the latest background on the Bing homepage, downloads it and sets it as the wallpaper for your Mac. Supports Mac OS X 10.8+ (tested on OS X 10.11). Currently development is still ongoing, but will upload the app when confident in it. 
+A status bar application for macOS which looks for the latest background on the Bing homepage, downloads it and sets it as the wallpaper for your Mac. Supports macOS 10.8+ (tested on macOS 10.11-13). Currently development is still ongoing, but will upload the app when confident in it. 
 
 Not in any way intended to infringe Microsoft's or Bing's property.
 
@@ -23,3 +23,4 @@ Further Work
 - Increase internet wait time after successive failures
 - Close memory leaks and manage memory better
 - Update header file to match main file
+- Move to Swift instead of Objective-C
